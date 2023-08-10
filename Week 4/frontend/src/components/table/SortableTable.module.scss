@@ -1,0 +1,18 @@
+/* SortableTable.module.scss */
+.sortableTable {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .tableHeader {
+    border: 1px solid black;
+    padding: 8px;
+    /* Additional header styles if needed */
+  }
+  
+  .tableCell {
+    border: 1px solid black;
+    padding: 8px;
+    /* Additional cell styles if needed */
+  }
+  
