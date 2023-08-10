@@ -1,6 +1,8 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
-//import data from "../../utils/dummydata.json";
+import axios from "axios";
+
+const backendBaseUrl = process.env.REACT_APP_BACKEND_URL;
 
 interface ArticlesInterface {
   id: string;
@@ -16,8 +18,6 @@ interface ArticlesInterface {
 type ArticlesProps = {
   articles: ArticlesInterface[];
 };
-
-const data = require("../../utils/dummydata.json")
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     const headers: { key: keyof ArticlesInterface; label: string }[] = [
@@ -39,25 +39,26 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     );
   };
   
-  export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
-    // Map the data to ensure all articles have consistent property names
-    const articles = data.articles.map((article: { id: any; _id: any; title: any; authors: any; source: any; pubyear: any; doi: any; claim: any; evidence: any; }) => ({
-      id: article.id ?? article._id,
-      title: article.title,
-      authors: article.authors,
-      source: article.source,
-      pubyear: article.pubyear,
-      doi: article.doi,
-      claim: article.claim,
-      evidence: article.evidence,
-    }));
+  export const getServerSideProps: GetServerSideProps<ArticlesProps> = async (_) => {
+    try {
+      // Make an API call to fetch data from the backend
+      const response = await axios.get(backendBaseUrl); // Replace with your actual API URL
+      const articles = response.data; // Assuming your response data directly contains articles
   
+      return {
+        props: {
+          articles,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching articles:", error);
   
-    return {
-      props: {
-        articles,
-      },
-    };
+      return {
+        props: {
+          articles: [],
+        },
+      };
+    }
   };
   
   export default Articles;
