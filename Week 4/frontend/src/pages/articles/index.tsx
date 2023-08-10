@@ -42,8 +42,8 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   export const getServerSideProps: GetServerSideProps<ArticlesProps> = async (_) => {
     try {
       // Make an API call to fetch data from the backend
-      const response = await axios.get(backendBaseUrl); // Replace with your actual API URL
-      const articles = response.data; // Assuming your response data directly contains articles
+      const response = await axios.get(backendBaseUrl || "");
+      const articles = response.data;
   
       return {
         props: {
